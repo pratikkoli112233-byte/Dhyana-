@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>Dhyāna — a stillness practice</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root {
+    --ink: #12171B;
+    --panel: #1B2226;
+    --panel2: #212a2f;
+    --border: #2A3236;
+    --text: #EDEAE3;
+    --muted: #7E8B8C;
+    --muted2: #5E6B6C;
+    --clay: #C97B63;
+    --sage: #7FA88A;
+    --violet: #8C7FB3;
+    --gold: #D4AF6A;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; padding:0; background: var(--ink); color: var(--text); font-family: 'Manrope', system-ui, sans-serif; }
+  #app { min-height: 100vh; max-width: 480px; margin: 0 auto; position: relative; padding-bottom: 40px; }
+  .fraunces { font-family: 'Fraunces', serif; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  input, textarea, select { font-family: inherit; }
+  a { color: inherit; }
+
+  .header { padding: 28px 20px 12px; display:flex; align-items:center; justify-content:space-between; }
+  .app-title { font-size: 24px; font-weight: 600; letter-spacing: 0.01em; }
+  .app-tag { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+  .icon-btn { width: 36px; height: 36px; border-radius: 50%; display:flex; align-items:center; justify-content:center; background: var(--panel); border: 1px solid var(--border); }
+
+  .section { padding: 18px 20px; }
+  .section-title { font-size: 12px; letter-spacing: 0.08em; color: var(--muted2); margin-bottom: 12px; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 18px; padding: 16px; margin-bottom: 10px; }
+  .btn-primary { background: var(--text); color: var(--ink); border-radius: 999px; padding: 14px 28px; font-weight: 700; font-size: 14px; display:inline-flex; align-items:center; gap:8px; }
+  .btn-ghost { background: var(--panel); border: 1px solid var(--border); border-radius: 999px; padding: 14px 28px; font-weight: 600; font-size: 14px; }
+  .btn-block { width: 100%; text-align:center; justify-content:center; }
+
+  .searchbar { display:flex; align-items:center; gap:10px; background: var(--panel); border:1px solid var(--border); border-radius:14px; padding: 12px 14px; margin: 0 20px 8px; }
+  .searchbar input { background:none; border:none; outline:none; color:var(--text); width:100%; font-size: 14px; }
+
+  .tech-grid { display:flex; flex-direction:column; gap:10px; }
+  .tech-row { display:flex; align-items:center; gap:14px; padding: 14px; background: var(--panel); border:1px solid var(--border); border-radius: 16px; }
+  .tech-icon { width: 46px; height:46px; border-radius: 50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .tech-name { font-weight: 600; font-size: 14px; }
+  .tech-meta { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+  .chip { display:inline-block; font-size: 10px; padding: 2px 8px; border-radius:999px; background: var(--panel2); color: var(--muted); margin-right:4px; }
+
+  .sheet-overlay { position: fixed; inset:0; background: rgba(0,0,0,0.65); display:flex; align-items:flex-end; justify-content:center; z-index: 50; }
+  .sheet { width:100%; max-width:480px; background: var(--panel); border:1px solid var(--border); border-top-left-radius: 26px; border-top-right-radius:26px; padding: 22px; max-height: 88vh; overflow-y:auto; }
+  .sheet-header { display:flex; align-items:center; justify-content:space-between; margin-bottom: 18px; }
+  .sheet-title { font-size: 19px; font-weight:600; font-family:'Fraunces',serif; }
+
+  .mandala { width: 100%; height: 120px; display:flex; align-items:center; justify-content:center; margin-bottom: 14px; position:relative; }
+  .ring { position:absolute; border-radius:50%; border: 1px solid; opacity:0.5; }
+
+  .orb-wrap { display:flex; flex-direction:column; align-items:center; justify-content:center; padding: 30px 0; }
+  .orb { border-radius: 999px; display:flex; align-items:center; justify-content:center; text-align:center; transition: transform 0.5s ease; }
+
+  .lang-btn { display:block; width:100%; text-align:left; padding: 16px 18px; border-radius:16px; background: var(--panel); border:1px solid var(--border); margin-bottom:10px; font-size:15px; font-weight:600; }
+  .lang-btn.active { border-color: var(--clay); background: var(--panel2); }
+
+  .input-basic { width:100%; padding: 13px 14px; border-radius: 12px; background: var(--ink); border:1px solid var(--border); color: var(--text); outline:none; font-size:14px; margin-bottom:12px; }
+  textarea.input-basic { resize:vertical; min-height:70px; }
+
+  .article-card { background: linear-gradient(160deg, var(--panel2), var(--panel)); border:1px solid var(--border); border-radius:20px; padding:20px; margin-bottom:14px; position:relative; overflow:hidden; }
+  .article-title { font-family:'Fraunces',serif; font-size:19px; font-weight:600; margin-bottom:8px; }
+  .article-body { font-size: 13.5px; line-height:1.65; color:#CBD3D2; }
+  .qbtn { display:block; width:100%; text-align:left; padding:11px 14px; border-radius:12px; background: rgba(255,255,255,0.04); border:1px solid var(--border); margin-top:8px; font-size:12.5px; color: var(--text); }
+
+  .assistant-fab { position:fixed; bottom: 22px; right: 50%; transform: translateX(calc(240px - 68px)); width:52px; height:52px; border-radius:50%; background: linear-gradient(135deg, var(--violet), var(--clay)); display:flex; align-items:center; justify-content:center; box-shadow: 0 6px 20px rgba(0,0,0,0.4); z-index: 40; }
+  @media (max-width: 480px) { .assistant-fab { right: 20px; transform:none; } }
+
+  .stage-badge { display:flex; align-items:center; gap:10px; padding:14px; border-radius:16px; background: linear-gradient(120deg, rgba(212,175,106,0.12), rgba(140,127,179,0.08)); border:1px solid var(--border); }
+
+  .disclaimer-box { font-size:12.5px; line-height:1.6; color:#CBD3D2; background: var(--ink); border:1px solid var(--border); border-radius:14px; padding:14px; margin-bottom:14px; }
+
+  .toggle-row { display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-bottom: 1px solid var(--border); }
+
+  .chat-msg { padding:10px 13px; border-radius:14px; margin-bottom:8px; font-size:13.5px; line-height:1.5; max-width:88%; }
+  .chat-user { background: var(--panel2); margin-left:auto; }
+  .chat-ai { background: rgba(140,127,179,0.12); border:1px solid rgba(140,127,179,0.3); }
+
+  ::-webkit-scrollbar { width:0; height:0; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ================= DATA ================= */
+
+const I18N = {
+  en: {
+    appTitle: "Dhyāna", appTag: "a stillness practice",
+    chooseLanguage: "Choose your language", english: "English", marathi: "मराठी (Marathi)",
+    otherLangPrompt: "Or type a different language", continueBtn: "Continue",
+    apiTitle: "Connect Gemini (optional)", apiDesc: "Add your Gemini API key to unlock the AI assistant — meditation Q&A, benefits, and article discussions. You can always add this later in Settings.",
+    apiPlaceholder: "AIzaSy...", saveKey: "Save & continue", skipAi: "Skip — use without AI",
+    home: "Home", search: "Search meditations, sounds, articles…",
+    quickBreath: "Quick breath", techniques: "Meditation techniques", sounds: "Ambient sounds", articles: "Reflections",
+    yourPractice: "Your practice", streakDay: "day streak", begin: "Begin", endEarly: "End early",
+    disclaimerTitle: "Before you begin",
+    disclaimerBody: "This app offers general relaxation and breathing practices — it is not medical advice or treatment. If you are pregnant, have a heart or respiratory condition, epilepsy, a history of psychosis, or are currently in a mental health crisis, please consult a doctor or therapist before practicing, especially breath-holding exercises. Stop immediately if you feel dizzy or unwell.",
+    understood: "I understand, begin",
+    chooseMusic: "Choose background sound", noMusic: "No sound", duration: "Duration",
+    startSession: "Start", minutes: "min", add: "Add", addTechnique: "Add your own technique", addSound: "Add your own sound",
+    benefits: "Benefits", instructions: "How to practice", askAI: "Ask the assistant", settings: "Settings",
+    appLanguage: "App language", geminiKey: "Gemini API key", changeKey: "Update key", removeKey: "Remove key",
+    sessionsCount: "sessions", totalMins: "total minutes",
+    sessionDone: "Session complete", stayCalm: "Stay with the calm a little longer?", continueSound: "Continue ambient sound", done: "Done",
+    name: "Name", category: "Category", stepsPlaceholder: "One instruction per line", benefitsPlaceholder: "Short benefit summary",
+    save: "Save", cancel: "Cancel", uploadAudio: "Choose audio file from your device",
+    sessionOnlyNote: "Note: added sounds are available for this session only.",
+    aiUnavailable: "Add your Gemini API key in Settings to use the assistant.",
+    typeQuestion: "Type your question…", send: "Send", thinking: "thinking…",
+    relatedQuestions: "You might wonder"
+  },
+  mr: {
+    appTitle: "ध्यान", appTag: "स्थिरतेचा सराव",
+    chooseLanguage: "तुझी भाषा निवड", english: "English", marathi: "मराठी",
+    otherLangPrompt: "किंवा वेगळी भाषा टाईप कर", continueBtn: "पुढे जा",
+    apiTitle: "Gemini जोडा (ऐच्छिक)", apiDesc: "AI assistant वापरण्यासाठी तुझी Gemini API key टाक — प्रश्न विचारणं, फायदे समजून घेणं यासाठी उपयोगी. नंतर Settings मध्ये पण जोडता येईल.",
+    apiPlaceholder: "AIzaSy...", saveKey: "जतन करून पुढे जा", skipAi: "वगळा — AI शिवाय वापर",
+    home: "मुख्यपान", search: "meditation, sounds, articles शोध…",
+    quickBreath: "झटपट श्वास", techniques: "ध्यानाचे प्रकार", sounds: "पार्श्वसंगीत", articles: "चिंतन",
+    yourPractice: "तुझा सराव", streakDay: "दिवस streak", begin: "सुरू कर", endEarly: "आधी थांबव",
+    disclaimerTitle: "सुरू करण्याआधी",
+    disclaimerBody: "हे app सामान्य विश्रांती आणि श्वासाचे सराव देतं — हे वैद्यकीय सल्ला नाही. गर्भवती असाल, हृदय/श्वसनाचा त्रास, epilepsy, मानसिक आजाराचा इतिहास असेल किंवा सध्या mental health crisis मध्ये असाल, तर सराव करण्याआधी डॉक्टर किंवा थेरपिस्टचा सल्ला घे — विशेषतः श्वास रोखण्याचे व्यायाम. चक्कर किंवा अस्वस्थ वाटल्यास लगेच थांबव.",
+    understood: "समजलं, सुरू कर",
+    chooseMusic: "पार्श्वसंगीत निवड", noMusic: "आवाज नको", duration: "वेळ",
+    startSession: "सुरू कर", minutes: "मिनिटं", add: "जोड", addTechnique: "स्वतःचा प्रकार जोड", addSound: "स्वतःचा आवाज जोड",
+    benefits: "फायदे", instructions: "कसं करायचं", askAI: "assistant ला विचार", settings: "Settings",
+    appLanguage: "App भाषा", geminiKey: "Gemini API key", changeKey: "key बदल", removeKey: "key काढ",
+    sessionsCount: "sessions", totalMins: "एकूण मिनिटं",
+    sessionDone: "Session पूर्ण झालं", stayCalm: "थोडा वेळ शांततेत राहायचं?", continueSound: "आवाज चालू ठेव", done: "झालं",
+    name: "नाव", category: "प्रकार", stepsPlaceholder: "प्रत्येक ओळीत एक सूचना", benefitsPlaceholder: "थोडक्यात फायदा",
+    save: "जतन कर", cancel: "रद्द", uploadAudio: "फोनमधून audio file निवड",
+    sessionOnlyNote: "टीप: जोडलेला आवाज फक्त या session साठीच राहील.",
+    aiUnavailable: "Assistant वापरायला Settings मध्ये Gemini API key टाक.",
+    typeQuestion: "तुझा प्रश्न टाईप कर…", send: "पाठव", thinking: "विचार करतोय…",
+    relatedQuestions: "तुला हे पडू शकतं"
+  },
+  hi: {
+    appTitle: "ध्यान", appTag: "स्थिरता का अभ्यास",
+    chooseLanguage: "अपनी भाषा चुनें", english: "English", marathi: "मराठी",
+    otherLangPrompt: "या अलग भाषा टाइप करें", continueBtn: "आगे बढ़ें",
+    apiTitle: "Gemini जोड़ें (वैकल्पिक)", apiDesc: "AI assistant के लिए अपनी Gemini API key डालें। बाद में Settings में भी जोड़ सकते हैं।",
+    apiPlaceholder: "AIzaSy...", saveKey: "सेव करके आगे बढ़ें", skipAi: "छोड़ें — बिना AI इस्तेमाल करें",
+    home: "होम", search: "meditation, sounds, articles खोजें…",
+    quickBreath: "त्वरित श्वास", techniques: "ध्यान के प्रकार", sounds: "पृष्ठभूमि ध्वनि", articles: "चिंतन",
+    yourPractice: "आपका अभ्यास", streakDay: "दिन streak", begin: "शुरू करें", endEarly: "जल्दी समाप्त करें",
+    disclaimerTitle: "शुरू करने से पहले",
+    disclaimerBody: "यह ऐप सामान्य विश्राम और श्वास अभ्यास देता है — यह चिकित्सीय सलाह नहीं है। यदि आप गर्भवती हैं, हृदय/श्वसन संबंधी समस्या, epilepsy, मानसिक बीमारी का इतिहास है, या वर्तमान में संकट में हैं, तो अभ्यास से पहले डॉक्टर या थेरेपिस्ट से सलाह लें। चक्कर आए तो तुरंत रुकें।",
+    understood: "समझ गया, शुरू करें",
+    chooseMusic: "पृष्ठभूमि ध्वनि चुनें", noMusic: "आवाज़ नहीं", duration: "समय",
+    startSession: "शुरू करें", minutes: "मिनट", add: "जोड़ें", addTechnique: "अपना तरीका जोड़ें", addSound: "अपनी आवाज़ जोड़ें",
+    benefits: "फायदे", instructions: "कैसे करें", askAI: "असिस्टेंट से पूछें", settings: "सेटिंग्स",
+    appLanguage: "ऐप भाषा", geminiKey: "Gemini API key", changeKey: "key बदलें", removeKey: "key हटाएं",
+    sessionsCount: "sessions", totalMins: "कुल मिनट",
+    sessionDone: "Session पूरा हुआ", stayCalm: "थोड़ी देर शांति में रहना है?", continueSound: "आवाज़ जारी रखें", done: "हो गया",
+    name: "नाम", category: "श्रेणी", stepsPlaceholder: "हर लाइन में एक निर्देश", benefitsPlaceholder: "संक्षिप्त फायदा",
+    save: "सेव करें", cancel: "रद्द करें", uploadAudio: "फोन से audio file चुनें",
+    sessionOnlyNote: "नोट: जोड़ी गई आवाज़ सिर्फ इस session के लिए रहेगी।",
+    aiUnavailable: "Assistant इस्तेमाल करने के लिए Settings में Gemini API key डालें।",
+    typeQuestion: "अपना सवाल टाइप करें…", send: "भेजें", thinking: "सोच रहा हूँ…",
+    relatedQuestions: "आपके मन में यह आ सकता है"
+  }
+};
+function t(key) {
+  const lang = state.lang && I18N[state.lang] ? state.lang : 'en';
+  return (I18N[lang] && I18N[lang][key]) || I18N.en[key] || key;
+}
+
+const CATEGORY_COLOR = {
+  breath: "#7FA88A", stillness: "#8C7FB3", sound: "#D4AF6A", movement: "#C97B63", visualization: "#6FA0B0", inquiry: "#B08CC0"
+};
+function catIcon(cat, size=22) {
+  const c = CATEGORY_COLOR[cat] || "#8C7FB3";
+  const rings = {
+    breath: `<circle cx="12" cy="12" r="9" stroke="${c}" stroke-width="1.4"/><circle cx="12" cy="12" r="4.5" stroke="${c}" stroke-width="1.4"/>`,
+    stillness: `<circle cx="12" cy="12" r="9" stroke="${c}" stroke-width="1.4"/><circle cx="12" cy="12" r="1.6" fill="${c}"/>`,
+    sound: `<path d="M4 12c1.5-4 3-4 4.5 0s3 4 4.5 0 3-4 4.5 0" stroke="${c}" stroke-width="1.4" fill="none"/>`,
+    movement: `<path d="M12 4a8 8 0 1 1-6.4 3.2" stroke="${c}" stroke-width="1.4" fill="none"/><path d="M5 5v3h3" stroke="${c}" stroke-width="1.4" fill="none"/>`,
+    visualization: `<path d="M2 12s4-6 10-6 10 6 10 6-4 6-10 6-10-6-10-6Z" stroke="${c}" stroke-width="1.3" fill="none"/><circle cx="12" cy="12" r="2.6" stroke="${c}" stroke-width="1.3"/>`,
+    inquiry: `<path d="M12 4v4M12 16v4M4 12h4M16 12h4" stroke="${c}" stroke-width="1.4"/><circle cx="12" cy="12" r="3" stroke="${c}" stroke-width="1.4"/>`
+  };
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">${rings[cat]||rings.stillness}</svg>`;
+}
+function assistantIcon(size=24, color="white") {
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">
+    <path d="M12 3c1 3 3 5 6 6-3 1-5 3-6 6-1-3-3-5-6-6 3-1 5-3 6-6Z" fill="${color}"/>
+    <circle cx="18.5" cy="5.5" r="1.4" fill="${color}" opacity="0.7"/>
+  </svg>`;
+}
+
+const TECHNIQUES = [
+  { id:"anapana", name:"Anapana (Breath Awareness)", category:"breath", duration:10,
+    benefits:"Settles a busy mind by anchoring attention to the natural breath; a foundation practice used across many traditions.",
+    steps:["Sit comfortably with your spine upright.","Close your eyes and let the breath move naturally — don't control it.","Rest your attention at the nostrils, noticing the sensation of air entering and leaving.","Whenever the mind wanders, gently bring it back to the breath, without frustration."] },
+  { id:"bodyscan", name:"Body Scan Meditation", category:"stillness", duration:15,
+    benefits:"Releases physical tension and builds body awareness; often used to unwind before sleep.",
+    steps:["Lie down or sit reclined, eyes closed.","Bring attention to your toes, noticing any sensation without judging it.","Slowly move your attention upward — feet, legs, torso, arms, head.","At each area, consciously soften and release tension before moving on."] },
+  { id:"metta", name:"Loving-Kindness (Metta)", category:"stillness", duration:12,
+    benefits:"Cultivates warmth toward yourself and others; shown to reduce hostility and improve mood.",
+    steps:["Sit quietly and bring a person you love to mind.","Silently repeat: 'may you be happy, may you be at ease.'","Extend the same phrases to yourself, then to a neutral person.","Finally, extend it to someone difficult, and then to all beings."] },
+  { id:"vipassana", name:"Vipassana (Insight Meditation)", category:"inquiry", duration:20,
+    benefits:"Trains clear observation of sensations and thoughts as they arise and pass, without reacting.",
+    steps:["Sit still with eyes closed, spine straight.","Observe whatever sensation is strongest — sound, breath, or bodily feeling.","Label it silently ('hearing', 'thinking', 'tightness') and let it pass.","Return to open observation after each label."] },
+  { id:"zazen", name:"Zazen (Zen Sitting)", category:"stillness", duration:20,
+    benefits:"Builds still, upright presence; central to Zen practice for calming discursive thought.",
+    steps:["Sit cross-legged or on a chair, hands resting in your lap.","Keep eyes half-open, gaze low and unfocused.","Let thoughts arise and pass like clouds — don't follow them.","Simply sit, without seeking any particular experience."] },
+  { id:"yoganidra", name:"Yoga Nidra (Yogic Sleep)", category:"stillness", duration:25,
+    benefits:"Deep relaxation between waking and sleep; reduces fatigue and anxiety.",
+    steps:["Lie flat on your back, arms relaxed by your sides.","Mentally scan and relax each body part in sequence.","Set a simple intention (sankalpa) silently to yourself.","Stay aware in the drowsy space between sleep and wakefulness."] },
+  { id:"walking", name:"Walking Meditation", category:"movement", duration:15,
+    benefits:"Brings mindfulness into motion; good for restless minds that struggle to sit still.",
+    steps:["Find a quiet stretch of 10-15 steps, indoors or outdoors.","Walk slowly, feeling each foot lift, move, and land.","Coordinate awareness with your breath, not a fixed pace.","At the end of the path, pause, turn mindfully, and continue."] },
+  { id:"mantra", name:"Mantra Meditation (Japa)", category:"sound", duration:15,
+    benefits:"Uses repeated sound to quiet mental chatter; supports focus and a sense of devotion.",
+    steps:["Choose a simple word or sound (e.g. 'Om' or 'so-hum').","Repeat it silently or softly aloud, in rhythm with your breath.","When the mind drifts, return gently to the repetition.","Let the sound become softer and more internal as you continue."] },
+  { id:"chakra", name:"Chakra Meditation", category:"visualization", duration:20,
+    benefits:"A visualization practice for body awareness, moving attention through the body's energy centers.",
+    steps:["Sit upright and close your eyes.","Bring attention to the base of your spine, then slowly move upward.","At each center, visualize a soft glow and breathe into that area.","Finish at the crown of the head, then sit quietly for a minute."] },
+  { id:"trataka", name:"Trataka (Candle Gazing)", category:"visualization", duration:10,
+    benefits:"Sharpens concentration by fixing gaze on a single point; traditionally used to steady the mind.",
+    steps:["Place a candle at eye level, about an arm's length away.","Gaze steadily at the flame without blinking, for as long as comfortable.","Close your eyes and observe the afterimage in your mind's eye.","Repeat 2-3 times, ending with eyes closed and still."] },
+  { id:"box", name:"Box Breathing (Sama Vritti)", category:"breath", duration:5,
+    benefits:"Equal-count breathing that calms the nervous system quickly; useful before stressful moments.",
+    steps:["Inhale slowly for a count of four.","Hold the breath gently for a count of four.","Exhale slowly for a count of four.","Hold empty for a count of four, then repeat."] },
+  { id:"478", name:"4-7-8 Breathing", category:"breath", duration:5,
+    benefits:"A longer exhale activates the body's relaxation response; often used for falling asleep.",
+    steps:["Inhale quietly through the nose for 4 counts.","Hold the breath for 7 counts.","Exhale completely through the mouth for 8 counts.","Repeat for four rounds, breathing normally between sets if needed."] },
+  { id:"pmr", name:"Progressive Muscle Relaxation", category:"stillness", duration:15,
+    benefits:"Systematically releases tension by contrasting tension and relaxation in muscle groups.",
+    steps:["Starting at your feet, tense the muscles firmly for 5 seconds.","Release suddenly and notice the wave of relaxation.","Move upward through calves, thighs, abdomen, arms, shoulders, face.","Finish with your whole body relaxed for a minute of stillness."] },
+  { id:"visualization", name:"Visualization Meditation", category:"visualization", duration:12,
+    benefits:"Uses mental imagery to shift mood and reduce stress; helpful for those who think in pictures.",
+    steps:["Close your eyes and picture a place where you feel completely safe.","Fill in details — sounds, light, temperature, textures.","Let yourself rest in that imagined space for several minutes.","Slowly bring attention back to the room before opening your eyes."] },
+  { id:"gratitude", name:"Gratitude Meditation", category:"stillness", duration:10,
+    benefits:"Shifts attention toward what's going well; linked to improved mood over time.",
+    steps:["Sit quietly and bring three things to mind you're grateful for.","Spend a minute with each, noticing how gratitude feels in the body.","Silently acknowledge one person you appreciate and why.","Close by resting in the feeling of appreciation, without words."] },
+  { id:"selfinquiry", name:"Self-Inquiry (Atma Vichara)", category:"inquiry", duration:20,
+    benefits:"A reflective practice of questioning the nature of the 'I', used in Advaita Vedanta traditions.",
+    steps:["Sit quietly and ask yourself silently, 'Who am I?'","Don't answer with words — simply observe what remains after the question.","When a thought arises, ask 'to whom does this thought occur?'","Keep returning attention to the sense of pure awareness itself."] },
+  { id:"soundbath", name:"Sound Bath / Nada Yoga", category:"sound", duration:20,
+    benefits:"Uses resonant sound to relax the body and quiet mental noise.",
+    steps:["Sit or lie down comfortably with eyes closed.","Play a sustained tone (bowls, drone, or the ambient sounds in this app).","Let your attention rest entirely on the sound, without analyzing it.","Notice the silence between and after each sound fading."] },
+  { id:"kundalini", name:"Kundalini Meditation", category:"movement", duration:20,
+    benefits:"Combines breath, chant, and gentle movement to build energy and focus.",
+    steps:["Sit tall with hands resting on your knees.","Begin long, deep breathing through the nose.","Add gentle spinal movement or a soft chant on the exhale.","Finish with several minutes of complete stillness."] },
+  { id:"thirdeye", name:"Third-Eye (Bhrumadhya) Meditation", category:"visualization", duration:15,
+    benefits:"Concentration practice focusing attention at the point between the eyebrows.",
+    steps:["Sit with eyes closed, spine straight.","Gently direct your inner attention to the point between your eyebrows.","Keep the physical eyes relaxed, not strained or squeezed shut.","If focus drifts, softly bring it back to that point."] },
+  { id:"taichi", name:"Tai Chi / Qigong Moving Meditation", category:"movement", duration:20,
+    benefits:"Slow, deliberate movement paired with breath; builds balance and a calm, focused state.",
+    steps:["Stand with feet shoulder-width apart, knees soft.","Move your arms in slow, continuous, circular motions.","Match each movement to a long inhale or exhale.","Keep attention on the sensation of movement, not on doing it 'correctly'."] },
+  { id:"breathcount", name:"Breath Counting Meditation", category:"breath", duration:10,
+    benefits:"A simple concentration practice that's easy for beginners to sustain.",
+    steps:["Sit comfortably and breathe naturally.","Silently count '1' on the first exhale, '2' on the next, up to 10.","Start again from 1 after reaching 10, or if you lose count.","Treat losing count as useful information, not a failure."] },
+  { id:"openawareness", name:"Open Awareness", category:"inquiry", duration:15,
+    benefits:"Rests attention in spacious awareness itself, rather than any single object.",
+    steps:["Sit quietly and let go of focusing on any one thing.","Allow sounds, sensations, and thoughts to arise and pass freely.","Notice the awareness in which all of this is happening.","Rest there, without pulling attention toward or away from anything."] }
+];
+
+const ARTICLES = [
+  { id:"present", title:"On the Present Moment", body:"Much of our unease doesn't come from what's actually happening, but from the mind's habit of living in the last five minutes or the next fifty. Contemplative traditions across cultures converge on a simple observation: the present moment is the only place where anything can actually be experienced or changed. Worry rehearses a future that hasn't arrived; regret replays a past that's already gone. Neither exists anywhere except in thought. This doesn't mean planning or reflecting are useless — it means noticing when the mind has quietly left the room you're actually sitting in. Meditation practice is, in large part, repeated training in noticing that departure and returning, gently, again and again.",
+    questions:["Why does the mind resist staying in the present?","How is this different from just distracting myself?"] },
+  { id:"stoic", title:"Stoic Acceptance and the Breath", body:"The Stoic philosophers drew a sharp line between what is within our control and what isn't — our judgments and responses versus outcomes, other people, and the past. Nowhere is this line clearer than in the breath. You cannot control how the day will go, but for the length of one inhale, you can control exactly this: how fully you let the air in. Many breathing practices work not because the breath is mystical, but because it's one of the few processes that is both automatic and adjustable — a live demonstration that calm is available as a choice in this moment, even when the larger situation is not.",
+    questions:["What did the Stoics actually mean by 'control'?","Can breath practice really change how I react to stress?"] },
+  { id:"advaita", title:"The Watcher Behind the Thought", body:"Advaita Vedanta poses an old and disarming question: who is aware of your thoughts? Not which thought is occurring, but what is doing the noticing. Try to locate that observer and it seems to slip away every time you look — because it's not another object among your experiences, it's the awareness in which experience happens at all. Self-inquiry practices use this question not as a riddle to solve intellectually, but as a way of loosening our tight identification with any single passing thought or mood. If thoughts come and go but something remains constant enough to notice them coming and going, perhaps that constancy is closer to who we are than any one thought ever was.",
+    questions:["Is 'the watcher' just another thought about myself?","How is this practiced without turning into pure abstraction?"] },
+  { id:"impermanence", title:"On Impermanence", body:"One of the oldest observations in contemplative thought is also one of the hardest to actually live by: everything changes. Moods pass, bodies age, relationships shift, even mountains erode given enough time. Suffering, in much of Buddhist philosophy, arises less from change itself and more from our resistance to it — the attempt to hold a wave still. Meditation offers small, repeated evidence of this truth: sit and watch a single breath, and you'll notice it is already becoming the next one before you can grasp it. Practicing with impermanence at this small scale can loosen the grip of larger fears about loss, aging, or uncertainty.",
+    questions:["If everything is impermanent, why try to build anything?","How does accepting impermanence reduce suffering rather than causing more?"] },
+  { id:"nonattachment", title:"Non-Attachment and Desire", body:"Non-attachment is often mistaken for not caring, when it more accurately means caring without a tight grip. You can want a good outcome fully while still being at peace if it doesn't arrive — the two aren't actually in conflict, though the mind treats them as though they were. Desire itself isn't the problem in most contemplative frameworks; compulsive grasping is. A useful test is noticing the difference between wanting something and needing it in order to be okay right now. Meditation practice, especially loving-kindness and gratitude forms, works partly by loosening that second, tighter kind of wanting.",
+    questions:["Doesn't non-attachment kill motivation and ambition?","How do you want something without needing it to happen?"] }
+];
+
+const SOUND_LIBRARY = [
+  { id:"rain", name:"Rain", type:"noise-filtered", freq:900 },
+  { id:"ocean", name:"Ocean waves", type:"noise-wave", freq:400 },
+  { id:"bowls", name:"Tibetan bowls", type:"harmonic", freq:220 },
+  { id:"om", name:"Om drone", type:"drone", freq:136.1 },
+  { id:"forest", name:"Forest ambience", type:"noise-filtered", freq:1400 }
+];
+
+const STAGES = [
+  { min:0, name:{en:"Ārambha — Just Beginning", mr:"आरंभ — नुकतीच सुरुवात", hi:"आरंभ — अभी शुरुआत"} },
+  { min:3, name:{en:"Abhyāsa — Building Practice", mr:"अभ्यास — सराव घडतोय", hi:"अभ्यास — अभ्यास बन रहा है"} },
+  { min:7, name:{en:"Sthiratā — Finding Steadiness", mr:"स्थिरता — स्थिरता सापडतेय", hi:"स्थिरता — स्थिरता मिल रही है"} },
+  { min:14, name:{en:"Ekāgratā — One-Pointed Focus", mr:"एकाग्रता — एकाग्रता वाढतेय", hi:"एकाग्रता — एकाग्रता बढ़ रही है"} },
+  { min:30, name:{en:"Dhyāna — Deepening Meditation", mr:"ध्यान — ध्यान अधिक खोल", hi:"ध्यान — ध्यान गहरा हो रहा है"} },
+  { min:60, name:{en:"Samādhi Jhalak — Glimpses of Stillness", mr:"समाधी झलक — स्थिरतेची झलक", hi:"समाधि झलक — स्थिरता की झलक"} },
+  { min:100, name:{en:"Sthitaprajña — Steady Wisdom", mr:"स्थितप्रज्ञ — स्थिर बुद्धी", hi:"स्थितप्रज्ञ — स्थिर बुद्धि"} }
+];
+function stageFor(days) {
+  let s = STAGES[0];
+  for (const st of STAGES) if (days >= st.min) s = st;
+  return s;
+}
+
+/* ================= STATE ================= */
+let state = {
+  lang: 'en', customLangNote: null, geminiKey: null,
+  onboarded: false, disclaimerAcked: false,
+  sessions: [], customTechniques: [], customSounds: [],
+  screen: 'loading', detailId: null, detailIsCustom: false,
+  searchQuery: '', pendingStart: null
+};
+
+async function loadState() {
+  try {
+    const res = await window.storage.get('dhyana_state', false);
+    if (res) {
+      const saved = JSON.parse(res.value);
+      state = { ...state, ...saved, screen: 'loading' };
+    }
+  } catch(e) {}
+  state.screen = state.onboarded ? 'home' : 'language';
+  render();
+}
+async function saveState() {
+  try {
+    const { screen, detailId, detailIsCustom, searchQuery, pendingStart, customSounds, ...persist } = state;
+    await window.storage.set('dhyana_state', JSON.stringify(persist), false);
+  } catch(e) {}
+}
+
+/* ================= AUDIO ================= */
+let audioCtx = null;
+function getCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+function chime(freq=520) {
+  try {
+    const ctx = getCtx();
+    const osc = ctx.createOscillator(); const gain = ctx.createGain();
+    osc.type = "sine"; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.14, ctx.currentTime+0.05);
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+1.2);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(); osc.stop(ctx.currentTime+1.3);
+  } catch(e){}
+}
+function speak(word) {
+  try {
+    if (!window.speechSynthesis) { chime(500); return; }
+    const u = new SpeechSynthesisUtterance(word);
+    u.lang = state.lang === 'mr' ? 'mr-IN' : state.lang === 'hi' ? 'hi-IN' : 'en-US';
+    u.rate = 0.85; u.volume = 0.9;
+    window.speechSynthesis.cancel();
+    window.speechSynthesis.speak(u);
+  } catch(e) { chime(500); }
+}
+const PHASE_WORD = {
+  inhale: { en:"Inhale", mr:"श्वास घ्या", hi:"साँस लें" },
+  hold1: { en:"Hold", mr:"रोखा", hi:"रोकें" },
+  exhale: { en:"Exhale", mr:"श्वास सोडा", hi:"साँस छोड़ें" },
+  hold2: { en:"Hold", mr:"रोखा", hi:"रोकें" }
+};
+
+class AmbientEngine {
+  constructor(sound) { this.sound = sound; this.nodes = []; this.playing = false; }
+  start() {
+    const ctx = getCtx();
+    this.playing = true;
+    const master = ctx.createGain(); master.gain.value = 0.16;
+    master.connect(ctx.destination); this.master = master;
+    if (this.sound.type.startsWith("noise")) {
+      const bufferSize = 2 * ctx.sampleRate;
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i=0;i<bufferSize;i++) data[i] = Math.random()*2-1;
+      const noise = ctx.createBufferSource(); noise.buffer = buffer; noise.loop = true;
+      const filter = ctx.createBiquadFilter(); filter.type = "lowpass"; filter.frequency.value = this.sound.freq;
+      noise.connect(filter); filter.connect(master); noise.start();
+      this.nodes.push(noise);
+      if (this.sound.type === "noise-wave") {
+        const lfo = ctx.createOscillator(); lfo.frequency.value = 0.12;
+        const lfoGain = ctx.createGain(); lfoGain.gain.value = 0.08;
+        lfo.connect(lfoGain); lfoGain.connect(master.gain); lfo.start();
+        this.nodes.push(lfo);
+      }
+    } else if (this.sound.type === "drone" || this.sound.type === "harmonic") {
+      const partials = this.sound.type === "drone" ? [1,2,3] : [1,1.5,2,2.6];
+      partials.forEach((p,i) => {
+        const osc = ctx.createOscillator(); osc.type="sine"; osc.frequency.value = this.sound.freq*p;
+        const g = ctx.createGain(); g.gain.value = 0.5/(i+1.5);
+        osc.connect(g); g.connect(master); osc.start();
+        this.nodes.push(osc);
+      });
+    }
+  }
+  stop() {
+    this.playing = false;
+    this.nodes.forEach(n => { try{n.stop();}catch(e){} try{n.disconnect();}catch(e){} });
+    if (this.master) try{this.master.disconnect();}catch(e){}
+    this.nodes = [];
+  }
+}
+let currentAmbient = null;
+function stopAmbient() { if (currentAmbient) { currentAmbient.stop(); currentAmbient = null; } }
+let customAudioEl = null;
+
+/* ================= GEMINI ================= */
+async function askGemini(prompt) {
+  if (!state.geminiKey) return null;
+  try {
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${state.geminiKey}`, {
+      method: "POST", headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ contents:[{ parts:[{ text: prompt }] }] })
+    });
+    const data = await res.json();
+    const text = data?.candidates?.[0]?.content?.parts?.map(p=>p.text).join(" ");
+    return text || "…";
+  } catch(e) { return null; }
+}
+
+/* ================= HELPERS ================= */
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function todayKey(ts=Date.now()){ const d=new Date(ts); return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`; }
+function computeStreak(sessions) {
+  if (!sessions.length) return 0;
+  const days = new Set(sessions.map(s=>todayKey(s.ts)));
+  let streak=0, cursor=Date.now();
+  while (days.has(todayKey(cursor))) { streak++; cursor -= 86400000; }
+  return streak;
+}
+function allTechniques() { return [...TECHNIQUES, ...state.customTechniques]; }
+function findTechnique(id) { return allTechniques().find(t=>t.id===id); }
+function allSounds() { return [...SOUND_LIBRARY, ...state.customSounds]; }
+
+function el(html) { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstElementChild; }
+function mount(html) { document.getElementById('app').innerHTML = html; }
+function on(id, evt, fn) { const e = document.getElementById(id); if (e) e.addEventListener(evt, fn); }
+
+/* ================= SCREENS ================= */
+
+function render() {
+  if (state.screen === 'loading') { mount(`<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div class="mono" style="color:var(--muted2);font-size:13px;">settling in…</div></div>`); return; }
+  if (state.screen === 'language') return renderLanguage();
+  if (state.screen === 'apikey') return renderApiKey();
+  if (state.screen === 'home') return renderHome();
+  if (state.screen === 'technique') return renderTechniqueDetail();
+  if (state.screen === 'session') return renderSession();
+  if (state.screen === 'articles') return renderArticles();
+  if (state.screen === 'article') return renderArticleDetail();
+  if (state.screen === 'sounds') return renderSounds();
+  if (state.screen === 'settings') return renderSettings();
+  if (state.screen === 'stats') return renderStats();
+}
+
+function renderLanguage() {
+  mount(`
+    <div class="section" style="padding-top:60px;">
+      <div class="fraunces" style="font-size:26px;font-weight:600;margin-bottom:6px;">${I18N.en.chooseLanguage}</div>
+      <div class="mono" style="color:var(--muted2);font-size:12px;margin-bottom:28px;">Dhyāna</div>
+      <button class="lang-btn ${state.lang==='en'?'active':''}" id="lang-en">${I18N.en.english}</button>
+      <button class="lang-btn ${state.lang==='mr'?'active':''}" id="lang-mr">${I18N.mr.marathi}</button>
+      <div style="margin-top:18px;">
+        <div class="mono" style="font-size:11px;color:var(--muted2);margin-bottom:8px;">${I18N.en.otherLangPrompt}</div>
+        <input class="input-basic" id="custom-lang-input" placeholder="e.g. Hindi, Tamil, Bengali…" />
+      </div>
+      <button class="btn-primary btn-block" id="lang-continue" style="margin-top:10px;">${I18N.en.continueBtn}</button>
+    </div>
+  `);
+  let picked = state.lang || 'en';
+  document.getElementById('lang-en').onclick = () => { picked='en'; document.getElementById('lang-en').classList.add('active'); document.getElementById('lang-mr').classList.remove('active'); };
+  document.getElementById('lang-mr').onclick = () => { picked='mr'; document.getElementById('lang-mr').classList.add('active'); document.getElementById('lang-en').classList.remove('active'); };
+  document.getElementById('lang-continue').onclick = async () => {
+    const custom = document.getElementById('custom-lang-input').value.trim();
+    if (custom) {
+      state.customLangNote = custom;
+      const lower = custom.toLowerCase();
+      state.lang = lower.startsWith('hin') ? 'hi' : lower.startsWith('mar') ? 'mr' : 'en';
+    } else {
+      state.lang = picked;
+    }
+    state.screen = 'apikey';
+    saveState(); render();
+  };
+}
+
+function renderApiKey() {
+  mount(`
+    <div class="section" style="padding-top:60px;">
+      <div class="fraunces" style="font-size:24px;font-weight:600;margin-bottom:10px;">${t('apiTitle')}</div>
+      <div style="font-size:13.5px;color:var(--muted);line-height:1.6;margin-bottom:20px;">${t('apiDesc')}</div>
+      <input class="input-basic mono" id="gemini-input" placeholder="${t('apiPlaceholder')}" />
+      <button class="btn-primary btn-block" id="save-key-btn" style="margin-bottom:12px;">${t('saveKey')}</button>
+      <button class="btn-ghost btn-block" id="skip-btn">${t('skipAi')}</button>
+    </div>
+  `);
+  document.getElementById('save-key-btn').onclick = () => {
+    const val = document.getElementById('gemini-input').value.trim();
+    if (val) state.geminiKey = val;
+    state.onboarded = true; state.screen = 'home';
+    saveState(); render();
+  };
+  document.getElementById('skip-btn').onclick = () => {
+    state.onboarded = true; state.screen = 'home';
+    saveState(); render();
+  };
+}
+
+function renderHome() {
+  const streak = computeStreak(state.sessions);
+  const stage = stageFor(streak);
+  const q = state.searchQuery.toLowerCase();
+  const filteredTech = allTechniques().filter(tc => !q || tc.name.toLowerCase().includes(q) || tc.benefits.toLowerCase().includes(q) || tc.category.includes(q));
+
+  mount(`
+    <div class="header">
+      <div><div class="app-title fraunces">${t('appTitle')}</div><div class="app-tag mono">${t('appTag')}</div></div>
+      <div style="display:flex;gap:8px;">
+        <button class="icon-btn" id="stats-btn">${svgFlame()}</button>
+        <button class="icon-btn" id="settings-btn">${svgGear()}</button>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:0;padding-bottom:8px;">
+      <div class="stage-badge">
+        <div style="font-size:22px;">${streak > 0 ? '🔥' : '🌱'}</div>
+        <div>
+          <div style="font-weight:700;font-size:14px;">${streak} ${t('streakDay')}</div>
+          <div class="mono" style="font-size:11px;color:var(--muted2);margin-top:1px;">${stage.name[state.lang]||stage.name.en}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:10px;padding-bottom:6px;">
+      <div class="section-title">${t('quickBreath')}</div>
+      <div class="card" id="quickbreath-card" style="cursor:pointer;">
+        <div style="display:flex;align-items:center;gap:14px;">
+          <div style="width:52px;height:52px;border-radius:50%;background:radial-gradient(circle,#7FA88A55,transparent 70%);border:1px solid #7FA88A88;display:flex;align-items:center;justify-content:center;">${catIcon('breath',26)}</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;font-size:14px;">Box Breathing</div>
+            <div class="mono" style="font-size:11px;color:var(--muted2);">4·4·4·4 — spoken cues, eyes closed friendly</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="searchbar" style="margin-top:6px;">
+      ${svgSearch()}
+      <input id="search-input" placeholder="${t('search')}" value="${state.searchQuery}" />
+    </div>
+
+    <div class="section" style="padding-top:6px;">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${t('techniques')}</span>
+        <button id="add-tech-btn" style="color:var(--clay);font-size:11px;font-weight:600;">+ ${t('add')}</button>
+      </div>
+      <div class="tech-grid">
+        ${filteredTech.map(tc => `
+          <div class="tech-row tech-item" data-id="${tc.id}">
+            <div class="tech-icon" style="background:${CATEGORY_COLOR[tc.category]}22;">${catIcon(tc.category,22)}</div>
+            <div style="flex:1;">
+              <div class="tech-name">${tc.name}</div>
+              <div class="tech-meta">${tc.duration} ${t('minutes')} <span class="chip">${tc.category}</span></div>
+            </div>
+            ${svgChevron()}
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:4px;">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${t('sounds')}</span>
+        <button id="sounds-nav-btn" style="color:var(--muted);font-size:11px;">${t('sounds')} →</button>
+      </div>
+      <div style="display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;">
+        ${allSounds().slice(0,5).map(s => `<div class="chip" style="padding:8px 14px;white-space:nowrap;">${s.name}</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="section" style="padding-top:4px;">
+      <div class="section-title" style="display:flex;justify-content:space-between;align-items:center;">
+        <span>${t('articles')}</span>
+        <button id="articles-nav-btn" style="color:var(--muted);font-size:11px;">${t('articles')} →</button>
+      </div>
+      ${ARTICLES.slice(0,2).map(a => `<div class="card article-nav" data-id="${a.id}" style="cursor:pointer;"><div style="font-weight:600;font-size:13.5px;">${a.title}</div></div>`).join('')}
+    </div>
+
+    <div class="assistant-fab" id="fab-assistant">${assistantIcon(24)}</div>
+  `);
+
+  document.getElementById('stats-btn').onclick = () => { state.screen='stats'; render(); };
+  document.getElementById('settings-btn').onclick = () => { state.screen='settings'; render(); };
+  document.getElementById('search-input').oninput = (e) => { state.searchQuery = e.target.value; render(); };
+  document.getElementById('sounds-nav-btn').onclick = () => { state.screen='sounds'; render(); };
+  document.getElementById('articles-nav-btn').onclick = () => { state.screen='articles'; render(); };
+  document.getElementById('add-tech-btn').onclick = () => showAddTechniqueSheet();
+  document.getElementById('quickbreath-card').onclick = () => { state.detailId='box'; state.detailIsCustom=false; state.screen='technique'; render(); };
+  document.querySelectorAll('.tech-item').forEach(node => {
+    node.onclick = () => { state.detailId = node.dataset.id; state.detailIsCustom = !TECHNIQUES.find(x=>x.id===node.dataset.id); state.screen='technique'; render(); };
+  });
+  document.querySelectorAll('.article-nav').forEach(node => {
+    node.onclick = () => { state.detailId = node.dataset.id; state.screen='article'; render(); };
+  });
+  document.getElementById('fab-assistant').onclick = () => showAssistantSheet(null);
+}
+
+function svgFlame(){return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 2c1 4-3 5-3 9a3 3 0 006 0c0-1-1-2-1-3 2 1 3 3 3 5a5 5 0 01-10 0c0-5 4-6 5-11Z" fill="#D4AF6A"/></svg>`;}
+function svgGear(){return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7E8B8C" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.65 1.65 0 004.6 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 112.83-2.83l.06.06A1.65 1.65 0 009 4.6a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 112.83 2.83l-.06.06A1.65 1.65 0 0019.4 9c.23.5.7.86 1.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1Z"/></svg>`;}
+function svgSearch(){return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7E8B8C" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>`;}
+function svgChevron(){return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#5E6B6C" stroke-width="1.8"><path d="M9 18l6-6-6-6"/></svg>`;}
+function svgX(){return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7E8B8C" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>`;}
+function svgBack(){return `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#EDEAE3" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>`;}
+
+function renderTechniqueDetail() {
+  const tc = findTechnique(state.detailId);
+  if (!tc) { state.screen='home'; return render(); }
+  const c = CATEGORY_COLOR[tc.category];
+  mount(`
+    <div class="header">
+      <button class="icon-btn" id="back-btn">${svgBack()}</button>
+      <div style="font-size:11px;color:var(--muted2);" class="mono">${tc.category}</div>
+    </div>
+    <div class="section" style="padding-top:0;">
+      <div class="mandala">
+        <div class="ring" style="width:60px;height:60px;border-color:${c}77;"></div>
+        <div class="ring" style="width:90px;height:90px;border-color:${c}44;"></div>
+        <div class="ring" style="width:120px;height:120px;border-color:${c}22;"></div>
+        <div style="position:relative;z-index:2;">${catIcon(tc.category,34)}</div>
+      </div>
+      <div class="fraunces" style="font-size:22px;font-weight:600;margin-bottom:4px;">${tc.name}</div>
+      <div class="mono" style="font-size:11px;color:var(--muted2);margin-bottom:16px;">${tc.duration} ${t('minutes')} · ${t('startSession').toLowerCase()}</div>
+
+      <div class="section-title">${t('benefits')}</div>
+      <div class="card">${tc.benefits}</div>
+
+      <div class="section-title">${t('instructions')}</div>
+      <div class="card">
+        ${tc.steps.map((s,i)=>`<div style="display:flex;gap:10px;margin-bottom:${i<tc.steps.length-1?'12px':'0'};"><div class="mono" style="color:${c};font-weight:600;">${i+1}</div><div style="font-size:13.5px;line-height:1.5;color:#D7DEDE;">${s}</div></div>`).join('')}
+      </div>
+
+      <button class="btn-ghost btn-block" id="ask-ai-tech-btn" style="margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        ${assistantIcon(16,'#8C7FB3')} ${t('askAI')}
+      </button>
+      <button class="btn-primary btn-block" id="start-tech-btn">${t('begin')}</button>
+    </div>
+  `);
+  document.getElementById('back-btn').onclick = () => { state.screen='home'; render(); };
+  document.getElementById('ask-ai-tech-btn').onclick = () => showAssistantSheet(`Tell me more about the "${tc.name}" meditation technique — its background, typical duration, and benefits, in 3-4 sentences.`);
+  document.getElementById('start-tech-btn').onclick = () => {
+    if (!state.disclaimerAcked) { showDisclaimer(() => { state.disclaimerAcked = true; saveState(); showPreSessionSheet(tc); }); }
+    else showPreSessionSheet(tc);
+  };
+}
+
+function showDisclaimer(onOk) {
+  const overlay = el(`<div class="sheet-overlay"><div class="sheet">
+    <div class="sheet-header"><div class="sheet-title">${t('disclaimerTitle')}</div></div>
+    <div class="disclaimer-box">${t('disclaimerBody')}</div>
+    <button class="btn-primary btn-block" id="disclaimer-ok">${t('understood')}</button>
+  </div></div>`);
+  document.body.appendChild(overlay);
+  overlay.querySelector('#disclaimer-ok').onclick = () => { overlay.remove(); onOk(); };
+}
+
+function showPreSessionSheet(tc) {
+  let selectedSound = null; let selectedDuration = tc.duration;
+  const overlay = el(`<div class="sheet-overlay"><div class="sheet">
+    <div class="sheet-header"><div class="sheet-title">${tc.name}</div><button id="close-pre">${svgX()}</button></div>
+    <div class="section-title">${t('duration')}</div>
+    <input type="range" min="3" max="40" value="${tc.duration}" id="dur-slider" style="width:100%;accent-color:${CATEGORY_COLOR[tc.category]};margin-bottom:6px;" />
+    <div class="mono" style="text-align:center;font-size:13px;color:var(--muted2);margin-bottom:16px;" id="dur-label">${tc.duration} ${t('minutes')}</div>
+    <div class="section-title">${t('chooseMusic')}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;">
+      <button class="chip sound-opt active" data-id="" style="padding:9px 14px;font-size:12px;">${t('noMusic')}</button>
+      ${allSounds().map(s=>`<button class="chip sound-opt" data-id="${s.id}" style="padding:9px 14px;font-size:12px;">${s.name}</button>`).join('')}
+    </div>
+    <button class="btn-primary btn-block" id="pre-start-btn">${t('startSession')}</button>
+  </div></div>`);
+  document.body.appendChild(overlay);
+  overlay.querySelector('#close-pre').onclick = () => overlay.remove();
+  overlay.querySelector('#dur-slider').oninput = (e) => { selectedDuration = Number(e.target.value); overlay.querySelector('#dur-label').textContent = `${selectedDuration} ${t('minutes')}`; };
+  overlay.querySelectorAll('.sound-opt').forEach(btn => {
+    btn.onclick = () => {
+      overlay.querySelectorAll('.sound-opt').forEach(b=>{b.classList.remove('active');b.style.background='';b.style.color='';});
+      btn.classList.add('active'); btn.style.background = 'var(--clay)'; btn.style.color = 'var(--ink)';
+      selectedSound = btn.dataset.id || null;
+    };
+  });
+  overlay.querySelector('#pre-start-btn').onclick = () => {
+    overlay.remove();
+    state.pendingStart = { techniqueId: tc.id, isCustom: state.detailIsCustom, durationMin: selectedDuration, soundId: selectedSound };
+    state.screen = 'session'; render();
+  };
+}
+
+let sessionTimer = null;
+let breathRaf = null;
+function renderSession() {
+  const p = state.pendingStart;
+  const tc = findTechnique(p.techniqueId);
+  const c = CATEGORY_COLOR[tc.category];
+  const isBreathType = tc.category === 'breath';
+
+  mount(`
+    <div class="header">
+      <div></div>
+      <div class="mono" style="font-size:11px;color:var(--muted2);">${tc.name}</div>
+    </div>
+    <div class="orb-wrap" style="height:56vh;">
+      <div class="orb" id="session-orb" style="width:200px;height:200px;background:radial-gradient(circle at 35% 30%, ${c}55, ${c}22 60%, transparent 75%);border:1px solid ${c}88;">
+        <div id="orb-content" style="text-align:center;">
+          <div class="fraunces" id="orb-time" style="font-size:30px;">--:--</div>
+          <div class="mono" id="orb-phase" style="font-size:11px;color:${c};margin-top:4px;">${t('startSession')}…</div>
+        </div>
+      </div>
+      <div class="mono" style="font-size:12px;color:var(--muted2);margin-top:24px;" id="session-remaining"></div>
+    </div>
+    <div class="section" style="display:flex;justify-content:center;">
+      <button class="btn-ghost" id="end-session-btn">${t('endEarly')}</button>
+    </div>
+  `);
+
+  const totalMs = p.durationMin * 60 * 1000;
+  const startTs = Date.now();
+  if (p.soundId) {
+    const sound = allSounds().find(s=>s.id===p.soundId);
+    if (sound) { stopAmbient(); if (sound.dataUrl) { customAudioEl = new Audio(sound.dataUrl); customAudioEl.loop = true; customAudioEl.volume=0.5; customAudioEl.play().catch(()=>{}); } else { currentAmbient = new AmbientEngine(sound); currentAmbient.start(); } }
+  }
+
+  const pattern = { inhale:4, hold1:4, exhale:4, hold2:4 };
+  const phaseOrder = ['inhale','hold1','exhale','hold2'];
+  let phaseIdx = 0; let phaseStart = performance.now();
+
+  function updateBreathPhase(now) {
+    if (!isBreathType) return;
+    const phase = phaseOrder[phaseIdx];
+    const dur = pattern[phase]*1000;
+    const elapsed = now - phaseStart;
+    if (elapsed >= dur) {
+      phaseIdx = (phaseIdx+1) % phaseOrder.length;
+      phaseStart = now;
+      const word = PHASE_WORD[phaseOrder[phaseIdx]];
+      speak(word[state.lang] || word.en);
+    }
+    const phaseNow = phaseOrder[phaseIdx];
+    const scale = phaseNow==='inhale' ? 0.6+0.4*(elapsed/dur) : phaseNow==='exhale' ? 1-0.4*(elapsed/dur) : phaseNow==='hold1' ? 1 : 0.6;
+    const orb = document.getElementById('session-orb');
+    if (orb) orb.style.transform = `scale(${scale})`;
+    const label = document.getElementById('orb-phase');
+    if (label) label.textContent = (PHASE_WORD[phaseNow][state.lang]||PHASE_WORD[phaseNow].en);
+  }
+
+  function tick() {
+    const now = Date.now();
+    const elapsed = now - startTs;
+    const remaining = Math.max(0, totalMs - elapsed);
+    const mm = Math.floor(remaining/60000); const ss = Math.floor((remaining%60000)/1000);
+    const timeEl = document.getElementById('orb-time');
+    if (timeEl) timeEl.textContent = `${mm}:${ss.toString().padStart(2,'0')}`;
+    const remEl = document.getElementById('session-remaining');
+    if (remEl) remEl.textContent = `${Math.ceil(remaining/60000)} ${t('minutes')} remaining`;
+    updateBreathPhase(performance.now());
+    if (remaining <= 0) { finishSession(tc, p); return; }
+    breathRaf = requestAnimationFrame(tick);
+  }
+  if (isBreathType) speak(PHASE_WORD.inhale[state.lang]||PHASE_WORD.inhale.en);
+  breathRaf = requestAnimationFrame(tick);
+
+  document.getElementById('end-session-btn').onclick = () => { cancelAnimationFrame(breathRaf); finishSession(tc, p, true); };
+}
+
+function finishSession(tc, p, early) {
+  cancelAnimationFrame(breathRaf);
+  const session = { id: uid(), ts: Date.now(), techniqueId: tc.id, durationSec: p.durationMin*60 };
+  state.sessions = [session, ...state.sessions];
+  saveState();
+  chime(660);
+  const keepSound = currentAmbient || customAudioEl;
+  const overlay = el(`<div class="sheet-overlay"><div class="sheet">
+    <div class="sheet-header"><div class="sheet-title">🪷 ${t('sessionDone')}</div></div>
+    ${keepSound ? `<div class="card" style="display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:13.5px;">${t('stayCalm')}</div>
+      <button class="btn-ghost" id="continue-sound-btn" style="padding:9px 16px;font-size:12px;">${t('continueSound')}</button>
+    </div>` : ''}
+    <button class="btn-primary btn-block" id="finish-done-btn" style="margin-top:14px;">${t('done')}</button>
+  </div></div>`);
+  document.body.appendChild(overlay);
+  if (keepSound) overlay.querySelector('#continue-sound-btn').onclick = () => { overlay.remove(); };
+  overlay.querySelector('#finish-done-btn').onclick = () => {
+    stopAmbient(); if (customAudioEl) { customAudioEl.pause(); customAudioEl=null; }
+    overlay.remove(); state.screen='home'; render();
+  };
+}
+
+function renderArticles() {
+  mount(`
+    <div class="header"><button class="icon-btn" id="back-btn">${svgBack()}</button><div class="mono" style="font-size:11px;color:var(--muted2);">${t('articles')}</div></div>
+    <div class="section" style="padding-top:0;">
+      ${ARTICLES.map(a=>`<div class="card article-nav" data-id="${a.id}" style="cursor:pointer;"><div style="font-weight:600;font-size:14.5px;font-family:'Fraunces',serif;">${a.title}</div><div style="font-size:12.5px;color:var(--muted2);margin-top:6px;">${a.body.slice(0,90)}…</div></div>`).join('')}
+    </div>
+  `);
+  document.getElementById('back-btn').onclick = () => { state.screen='home'; render(); };
+  document.querySelectorAll('.article-nav').forEach(n => n.onclick = () => { state.detailId = n.dataset.id; state.screen='article'; render(); });
+}
+
+function renderArticleDetail() {
+  const a = ARTICLES.find(x=>x.id===state.detailId);
+  mount(`
+    <div class="header"><button class="icon-btn" id="back-btn">${svgBack()}</button><div></div></div>
+    <div class="section" style="padding-top:0;">
+      <div class="article-card">
+        <div class="article-title">${a.title}</div>
+        <div class="article-body">${a.body}</div>
+      </div>
+      <div class="section-title">${t('relatedQuestions')}</div>
+      ${a.questions.map(q=>`<button class="qbtn ask-q" data-q="${q.replace(/"/g,'&quot;')}">${assistantIcon(13,'#8C7FB3')} &nbsp;${q}</button>`).join('')}
+    </div>
+  `);
+  document.getElementById('back-btn').onclick = () => { state.screen='articles'; render(); };
+  document.querySelectorAll('.ask-q').forEach(b => b.onclick = () => showAssistantSheet(b.dataset.q));
+}
+
+function renderSounds() {
+  mount(`
+    <div class="header"><button class="icon-btn" id="back-btn">${svgBack()}</button><div class="mono" style="font-size:11px;color:var(--muted2);">${t('sounds')}</div>
+      <button class="icon-btn" id="add-sound-btn">+</button>
+    </div>
+    <div class="section" style="padding-top:0;">
+      <div style="font-size:12px;color:var(--muted2);margin-bottom:14px;line-height:1.5;">Ambient tones generated in-app (no licensed tracks). ${t('sessionOnlyNote')}</div>
+      <div class="tech-grid">
+        ${allSounds().map(s=>`<div class="tech-row"><div class="tech-icon" style="background:#D4AF6A22;">${catIcon('sound',20)}</div><div style="flex:1;"><div class="tech-name">${s.name}</div></div>
+          <button class="btn-ghost play-sound-btn" data-id="${s.id}" style="padding:8px 14px;font-size:11px;">▶</button>
+        </div>`).join('')}
+      </div>
+    </div>
+  `);
+  document.getElementById('back-btn').onclick = () => { stopAmbient(); if(customAudioEl){customAudioEl.pause();customAudioEl=null;} state.screen='home'; render(); };
+  document.getElementById('add-sound-btn').onclick = () => showAddSoundSheet();
+  let playing = null;
+  document.querySelectorAll('.play-sound-btn').forEach(btn => {
+    btn.onclick = () => {
+      const s = allSounds().find(x=>x.id===btn.dataset.id);
+      if (playing === btn.dataset.id) { stopAmbient(); if(customAudioEl){customAudioEl.pause();customAudioEl=null;} playing=null; btn.textContent='▶'; return; }
+      stopAmbient(); if(customAudioEl){customAudioEl.pause();customAudioEl=null;}
+      document.querySelectorAll('.play-sound-btn').forEach(b=>b.textContent='▶');
+      if (s.dataUrl) { customAudioEl = new Audio(s.dataUrl); customAudioEl.loop=true; customAudioEl.play().catch(()=>{}); }
+      else { currentAmbient = new AmbientEngine(s); currentAmbient.start(); }
+      playing = btn.dataset.id; btn.textContent = '■';
+    };
+  });
+}
+
+function showAddSoundSheet() {
+  const overlay = el(`<div class="sheet-overlay"><div class="sheet">
+    <div class="sheet-header"><div class="sheet-title">${t('addSound')}</div><button id="close-s">${svgX()}</button></div>
+    <input class="input-basic" id="sound-name" placeholder="${t('name')}" />
+    <label class="btn-ghost btn-block" style="display:block;text-align:center;margin-bottom:12px;">
+      ${t('uploadAudio')}
+      <input type="file" accept="audio/*" id="sound-file" style="display:none;" />
+    </label>
+    <div class="mono" style="font-size:11px;color:var(--muted2);margin-bottom:14px;">${t('sessionOnlyNote')}</div>
+    <button class="btn-primary btn-block" id="save-sound-btn">${t('save')}</button>
+  </div></div>`);
+  document.body.appendChild(overlay);
+  overlay.querySelector('#close-s').onclick = () => overlay.remove();
+  overlay.querySelector('#save-sound-btn').onclick = () => {
+    const name = overlay.querySelector('#sound-name').value.trim() || "My sound";
+    const fileInput = overlay.querySelector('#sound-file');
+    if (fileInput.files[0]) {
+      const url = URL.createObjectURL(fileInput.files[0]);
+      state.customSounds.push({ id: uid(), name, dataUrl: url });
+    }
+    overlay.remove(); render();
+  };
+}
+
+function showAddTechniqueSheet() {
+  const overlay = el(`<div class="sheet-overlay"><div class="sheet">
+    <div class="sheet-header"><div class="sheet-title">${t('addTechnique')}</div><button id="close-tc">${svgX()}</button></div>
+    <input class="input-basic" id="tc-name" placeholder="${t('name')}" />
+    <select class="input-basic" id="tc-cat">
+      <option value="breath">breath</option><option value="stillness">stillness</option><option value="sound">sound</option>
+      <option value="movement">movement</option><option value="visualization">visualization</option><option value="inquiry">inquiry</option>
+    </select>
+    <input class="input-basic" id="tc-duration" type="number" min="1" max="90" value="10" placeholder="${t('duration')} (min)" />
+    <textarea class="input-basic" id="tc-benefits" placeholder="${t('benefitsPlaceholder')}"></textarea>
+    <textarea class="input-basic" id="tc-steps" placeholder="${t('stepsPlaceholder')}"></textarea>
+    <button class="btn-primary btn-block" id="save-tc-btn">${t('save')}</button>
+  </div></div>`);
+  document.body.appendChild(overlay);
+  overlay.querySelector('#close-tc').onclick = () => overlay.remove();
+  overlay.querySelector('#save-tc-btn').onclick = () => {
+    const name = overlay.querySelector('#tc-name').value.trim();
+    if (!name) return;
+    const tc = {
+      id: 'custom_'+uid(), name,
+      category: overlay.querySelector('#tc-cat').value,
+      duration: Number(overlay.querySelector('#tc-duration').value)||10,
+      benefits: overlay.querySelector('#tc-benefits').value.trim() || "Personal practice.",
+      steps: overlay.querySelector('#tc-steps').value.split('\n').map(s=>s.trim()).filter(Boolean)
+    };
+    state.customTechniques.push(tc);
+    saveState(); overlay.remove(); render();
+  };
+}
+
+function renderSettings() {
+  mount(`
+    <div class="header"><button class="icon-btn" id="back-btn">${svgBack()}</button><div class="mono" style="font-size:11px;color:var(--muted2);">${t('settings')}</div></div>
+    <div class="section" style="padding-top:0;">
+      <div class="section-title">${t('appLanguage')}</div>
+      <div class="card">
+        ${['en','mr','hi'].map(l=>`<div class="toggle-row"><div>${l==='en'?'English':l==='mr'?'मराठी':'हिन्दी'}</div><input type="radio" name="lang" class="lang-radio" value="${l}" ${state.lang===l?'checked':''}/></div>`).join('')}
+      </div>
+      <div class="section-title" style="margin-top:18px;">${t('geminiKey')}</div>
+      <div class="card">
+        <input class="input-basic mono" id="settings-key" placeholder="${t('apiPlaceholder')}" value="${state.geminiKey||''}" style="margin-bottom:8px;" />
+        <div style="display:flex;gap:8px;">
+          <button class="btn-ghost" id="save-key-settings" style="flex:1;">${t('changeKey')}</button>
+          <button class="btn-ghost" id="remove-key-settings" style="flex:1;">${t('removeKey')}</button>
+        </div>
+      </div>
+    </div>
+  `);
+  document.getElementById('back-btn').onclick = () => { state.screen='home'; render(); };
+  document.querySelectorAll('.lang-radio').forEach(r => r.onchange = () => { state.lang = r.value; saveState(); render(); });
+  document.getElementById('save-key-settings').onclick = () => { state.geminiKey = document.getElementById('settings-key').value.trim() || null; saveState(); render(); };
+  document.getElementById('remove-key-settings').onclick = () => { state.geminiKey = null; saveState(); render(); };
+}
+
+function renderStats() {
+  const streak = computeStreak(state.sessions);
+  const stage = stageFor(streak);
+  mount(`
+    <div class="header"><button class="icon-btn" id="back-btn">${svgBack()}</button><div class="mono" style="font-size:11px;color:var(--muted2);">${t('yourPractice')}</div></div>
+    <div class="section" style="padding-top:0;">
+      <div class="stage-badge" style="margin-bottom:16px;">
+        <div style="font-size:26px;">🔥</div>
+        <div><div style="font-weight:700;">${streak} ${t('streakDay')}</div><div class="mono" style="font-size:11px;color:var(--muted2);">${stage.name[state.lang]||stage.name.en}</div></div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:20px;">
+        <div class="card" style="text-align:center;"><div class="fraunces" style="font-size:22px;">${state.sessions.length}</div><div class="mono" style="font-size:10px;color:var(--muted2);">${t('sessionsCount')}</div></div>
+        <div class="card" style="text-align:center;"><div class="fraunces" style="font-size:22px;">${Math.round(state.sessions.reduce((a,s)=>a+s.durationSec,0)/60)}</div><div class="mono" style="font-size:10px;color:var(--muted2);">${t('totalMins')}</div></div>
+      </div>
+      <div class="section-title">${t('yourPractice')}</div>
+      ${state.sessions.slice(0,20).map(s=>{ const tc=findTechnique(s.techniqueId); return `<div class="card" style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:13.5px;font-weight:600;">${tc?tc.name:'—'}</div><div class="mono" style="font-size:11px;color:var(--muted2);">${new Date(s.ts).toLocaleDateString()}</div></div><div class="mono" style="font-size:12px;color:var(--muted2);">${Math.round(s.durationSec/60)}m</div></div>`; }).join('') || `<div style="color:var(--muted2);font-size:13px;">No sessions yet.</div>`}
+    </div>
+  `);
+  document.getElementById('back-btn').onclick = () => { state.screen='home'; render(); };
+}
+
+/* ================= ASSISTANT SHEET ================= */
+function showAssistantSheet(initialQuestion) {
+  const overlay = el(`<div class="sheet-overlay"><div class="sheet" style="min-height:50vh;display:flex;flex-direction:column;">
+    <div class="sheet-header"><div class="sheet-title" style="display:flex;align-items:center;gap:8px;">${assistantIcon(20,'#8C7FB3')} Assistant</div><button id="close-ai">${svgX()}</button></div>
+    <div id="chat-log" style="flex:1;overflow-y:auto;margin-bottom:12px;"></div>
+    ${!state.geminiKey ? `<div class="disclaimer-box">${t('aiUnavailable')}</div>` : `
+    <div style="display:flex;gap:8px;">
+      <input class="input-basic" id="chat-input" style="margin-bottom:0;" placeholder="${t('typeQuestion')}" />
+      <button class="btn-primary" id="chat-send" style="padding:12px 18px;">${t('send')}</button>
+    </div>`}
+  </div></div>`);
+  document.body.appendChild(overlay);
+  overlay.querySelector('#close-ai').onclick = () => overlay.remove();
+  const log = overlay.querySelector('#chat-log');
+  function addMsg(text, who) { const m = el(`<div class="chat-msg chat-${who}">${text}</div>`); log.appendChild(m); log.scrollTop = log.scrollHeight; }
+  async function send(q) {
+    addMsg(q, 'user');
+    const thinking = el(`<div class="chat-msg chat-ai mono">${t('thinking')}</div>`); log.appendChild(thinking); log.scrollTop = log.scrollHeight;
+    const answer = await askGemini(q + " (Answer in 3-4 concise sentences.)");
+    thinking.remove();
+    addMsg(answer || "…", 'ai');
+  }
+  if (state.geminiKey) {
+    overlay.querySelector('#chat-send').onclick = () => {
+      const input = overlay.querySelector('#chat-input');
+      const q = input.value.trim(); if (!q) return; input.value=''; send(q);
+    };
+  }
+  if (initialQuestion) { if (state.geminiKey) send(initialQuestion); else addMsg(initialQuestion, 'user'); }
+}
+
+/* ================= INIT ================= */
+loadState();
+</script>
+</body>
+</html>
